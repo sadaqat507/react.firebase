@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, Input, Row, Typography } from 'antd'
-import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, updateEmail, sendEmailVerification } from 'firebase/auth'
 import { auth } from 'config/firebase'
 
 const { Title } = Typography
@@ -72,6 +72,47 @@ export default function Login() {
             });
     };
 
+     const showAuthUser=()=>{
+        const user= auth.currentUser
+
+        updateProfile(user, {
+            displayName:"sadaqat Ali"
+          }).then(() => {
+            console.log("Profile updated!")
+            console.log(user)
+            // ...
+          }).catch((error) => {
+            console.log("An error occurred")
+            console.log(error)
+            // ...
+          });
+
+    }
+    const updateUserProfile = () => {
+        const user = auth.currentUser;
+    
+        if (user) {
+            console.log("Function is clicked now.");
+    
+            // First, send a verification email to the new address
+            sendEmailVerification   (user)
+                .then(() => {
+                    console.log("Verification email sent. Please verify before updating the email.");
+                    alert("A verification email has been sent to your new email address. Please verify it before updating your email.");
+    
+                    // Optionally, you can guide the user to verify their email
+                })
+                .catch((error) => {
+                    console.error("An error occurred while sending the verification email:", error);
+                    alert(`Failed to send verification email: ${error.message}`);
+                });
+        } else {
+            console.log("No user is currently signed in.");
+        }
+    };
+
+     
+    
     return (
         <main className='auth'>
             <div className="card p-3 p-md-4 w-100">
@@ -81,6 +122,9 @@ export default function Login() {
                         <p>{user.uid}</p>
                         <p>User Display Name = {user.displayName}</p>
                         <button className='btn btn-outline-danger text-center' type='button' onClick={handleLogout}>Logout</button>
+                        <button className='btn btn-outline-info text-center' type='button' onClick={showAuthUser}>User Show</button>
+                        <button className='btn btn-outline-success text-center' type='button' onClick={updateUserProfile}>Update User Profile</button>
+                         
                     </div> :
                     <Form layout="vertical" onSubmitCapture={handleSubmit}>
                         <Title level={2} className='text-center'>Login</Title>

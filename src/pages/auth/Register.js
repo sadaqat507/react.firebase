@@ -21,8 +21,8 @@ export default function Register() {
 
         fullName = fullName.trim()
 
-        if (fullName.length < 3) { return window.toastify("Please enter your full name", "error") }
-        if (!window.isEmail(email)) { return window.toastify("Please enter a valid email address", "error") }
+        if (fullName.length < 3) { return window.toastify("Please enter your full name.", "error") }
+        if (!window.isEmail(email)) { return window.toastify("Please enter a valid email address.", "error") }
         if (password.length < 6) { return window.toastify("Password must be atleast 6 chars.", "error") }
         if (confirmPassword !== password) { return window.toastify("Password doesn't match", "error") }
 
@@ -32,7 +32,7 @@ export default function Register() {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log("user", user)
-                window.toastify("A new user has been successfully registered.Set ", "success")
+                window.toastify("A new user has been successfully registered ", "success")
             })
             .catch((error) => {
                 console.error("error", error)

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Col, Form, Input, Row, Typography } from 'antd'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth } from 'config/firebase'
+import { auth, firestore } from 'config/firebase'
+import { registerid } from 'contexts/AuthContext'
+import { doc, setDoc } from 'firebase/firestore/lite'
 
 const { Title } = Typography
 
-const initialState = { fullName: "", email: "", password: "", confirmPassword: "" }
+const initialState = { fullName: "", email: "", password: "", confirmPassword: "" ,registerid:registerid}
 
 export default function Register() {
 
@@ -32,7 +34,16 @@ export default function Register() {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log("user", user)
-                window.toastify("A new user has been successfully registered ", "success")
+                window.toastify("A new user has been successfully registered ", "success");
+                let { fullName, email } = state
+
+                try{
+                    setDoc(doc(firestore,"users",user.uid),{fullName,email,uid:user.uid})
+                }catch(e){
+                    console.log( "error",e)
+                }
+
+
             })
             .catch((error) => {
                 console.error("error", error)

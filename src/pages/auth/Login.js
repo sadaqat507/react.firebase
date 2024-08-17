@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Col, Form, Input, Row, Typography } from 'antd'
-import { signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, updateEmail, sendEmailVerification } from 'firebase/auth'
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendEmailVerification } from 'firebase/auth'
 import { auth } from 'config/firebase'
 
 const { Title } = Typography
@@ -72,15 +72,17 @@ export default function Login() {
             });
     };
 
+
+    console.log( user)
      const showAuthUser=()=>{
         const user= auth.currentUser
 
         updateProfile(user, {
-            displayName:"sadaqat Ali"
-          }).then(() => {
+            displayName:"sadaqat Ali",
+            photoURL:"https://yt3.ggpht.com/Qr2G7a3vLZGuqeWTe5BjxNPBYYwTi3T7gKkSeG-Ug4fk9sPHEZeyJ6uobmSTn-tpd0t0SlMeXw=s88-c-k-c0x00ffffff-no-rj"
+           }).then(() => {
             console.log("Profile updated!")
-            console.log(user)
-            // ...
+             // ...
           }).catch((error) => {
             console.log("An error occurred")
             console.log(error)
@@ -99,7 +101,8 @@ export default function Login() {
                 .then(() => {
                     console.log("Verification email sent. Please verify before updating the email.");
                     alert("A verification email has been sent to your new email address. Please verify it before updating your email.");
-    
+                    
+
                     // Optionally, you can guide the user to verify their email
                 })
                 .catch((error) => {
@@ -124,7 +127,7 @@ export default function Login() {
                         <button className='btn btn-outline-danger text-center' type='button' onClick={handleLogout}>Logout</button>
                         <button className='btn btn-outline-info text-center' type='button' onClick={showAuthUser}>User Show</button>
                         <button className='btn btn-outline-success text-center' type='button' onClick={updateUserProfile}>Update User Profile</button>
-                         
+                         <img src={user.photoURL} alt= {` ${user.email} photo URL`} />
                     </div> :
                     <Form layout="vertical" onSubmitCapture={handleSubmit}>
                         <Title level={2} className='text-center'>Login</Title>

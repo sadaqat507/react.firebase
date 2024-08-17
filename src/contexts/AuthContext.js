@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useReducer, useState } from 'react'
 
 const Auth = createContext()
+export const registerid=Math.random(36).toString().slice(2);
 
 const initialState = { isAuthenticated: false, user: {} }
-
 const reducer = (state, { type, payload }) => {
     switch (type) {
         case "SET_LOGGED_IN":
